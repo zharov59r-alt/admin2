@@ -19,12 +19,12 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("""
             select new ru.zharov.admin.dto.user.UserAllResponse(
                     u.id,
-                    u.email, 
-                    u.firstName, 
-                    u.lastName, 
-                    u.middleName, 
+                    u.email,
+                    u.firstName,
+                    u.lastName,
+                    u.middleName,
                     u.creationDate
-                        ) 
+                        )
             from   User u 
             where  fts(u.searchTextVector, :searchText) 
             and    (       :roleIds is null 

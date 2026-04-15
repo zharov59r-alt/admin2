@@ -41,6 +41,7 @@ public class User {
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     @BatchSize(size = 10)
     private List<UserRoleLink> userRoleLinks = new ArrayList<>();
@@ -48,16 +49,5 @@ public class User {
     @Column(name = "search_text_vector", columnDefinition = "text", insertable = false, updatable = false)
     private String searchTextVector;
 
-
-    public String toString() {
-        return "User(id=" + this.getId() +
-                ", email=" + this.getEmail() +
-                ", password=" + this.getPassword() +
-                ", firstName=" + this.getFirstName() +
-                ", lastName=" + this.getLastName() +
-                ", middleName=" + this.getMiddleName() +
-                ", creationDate=" + String.valueOf(this.getCreationDate()) +
-                ", searchTextVector=" + this.getSearchTextVector() + ")";
-    }
 
 }

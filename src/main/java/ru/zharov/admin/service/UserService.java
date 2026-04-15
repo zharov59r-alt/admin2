@@ -48,6 +48,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserAllResponse> findAllByNameAndRole(UserAllRequest request) {
+        log.info("findAllByNameAndRole");
         return userRepository.findAllByNameAndRole(
                 request.getSearchText(),
                 request.getRoles(),

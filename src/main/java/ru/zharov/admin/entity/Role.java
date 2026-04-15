@@ -12,6 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @Entity
 @Table(name = "role", schema = "admin")
 public class Role {
@@ -28,12 +29,8 @@ public class Role {
     @Column(name = "role_description")
     private String description;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "role")
     private List<UserRoleLink> userRoleLinks = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return "Role(id=" + this.getId() + ", name=" + this.getName() + ", description=" + this.getDescription() + ")";
-    }
 
 }

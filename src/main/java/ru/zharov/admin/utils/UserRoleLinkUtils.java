@@ -51,7 +51,7 @@ public class UserRoleLinkUtils {
                         .filter(roleId -> roles.stream().noneMatch(r -> r.getId() == roleId))
                         .collect(Collectors.toList());
 
-                log.info("removeRoles " + removeRoles.toString());
+                log.info("removeRoles " + removeRoles);
 
                 userRoleLinkRepository.deleteAllByIdInBatch(removeRoles);
 

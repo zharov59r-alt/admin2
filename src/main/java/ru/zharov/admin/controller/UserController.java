@@ -17,6 +17,7 @@ public class UserController {
 
     @PostMapping("/all")
     public List<UserAllResponse> findAll(@RequestBody(required = false) UserAllRequest request) {
+
         return userService.findAllByNameAndRole(request);
     }
 
