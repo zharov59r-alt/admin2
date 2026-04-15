@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: zharov
+      changes:
+        - createSequence:
+            schemaName: admin
+            sequenceName: s_role_id
+        - createSequence:
+            schemaName: admin
+            sequenceName: s_user_role_link_id
+        - createTable:
+            schemaName: admin
+            tableName: role
+            columns:
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_name
+                  type: text
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: role_description
+                  type: text
+                  constraints:
+                    nullable: false
+        - createTable:
+            schemaName: admin
+            tableName: user_role_link
+            columns:
+              - column:
+                  name: user_role_link_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_role_link_user_id
+                    references: admin.user (user_id)
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_role_link_role_id
+                    references: admin.role (role_id)

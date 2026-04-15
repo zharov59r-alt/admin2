@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: migration1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: migration2.yaml
+      relativeToChangelogFile: true
