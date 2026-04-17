@@ -9,12 +9,21 @@ import org.springframework.data.repository.query.Param;
 import ru.zharov.admin.dto.user.UserAllResponse;
 import ru.zharov.admin.dto.user.UserAllResponse2;
 import ru.zharov.admin.entity.User;
+import ru.zharov.admin.exception.NotFoundException;
+import ru.zharov.admin.exception.ValidationException;
 
 import java.lang.annotation.Native;
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
+
+    default User findByIdOrThrow(Long userId) {
+        if (userId == null)
+            throw new ValidationException("ID пользователя не задан");
+        return findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID: " + userId + " не найден"));
+    }
 
     @Query("""
             select new ru.zharov.admin.dto.user.UserAllResponse(

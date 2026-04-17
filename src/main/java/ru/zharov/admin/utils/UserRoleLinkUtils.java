@@ -22,28 +22,28 @@ public class UserRoleLinkUtils {
 
     public void merge(User user, List<Role> roles) {
 
-        log.info("UserRoleLinkUtils begin");
-        log.info("roles {}", roles);
+        log.debug("UserRoleLinkUtils begin");
+        log.debug("roles {}", roles);
 
         // если новый список ролей пустой, то просто чистим все и выходим
         if (roles.isEmpty()) {
-            log.info("remove all");
+            log.debug("remove all");
             userRoleLinkRepository.deleteByUserId(user.getId());
         } else {
 
             List<UserRoleLink> currentUserRoleLink = userRoleLinkRepository.findByUser(user);
-            log.info("currentUserRoleLink {}", currentUserRoleLink);
+            log.debug("currentUserRoleLink {}", currentUserRoleLink);
 
             // если список существующих ролей пуст, то просто все инсертим
             if (currentUserRoleLink.isEmpty()) {
-                log.info("save all");
+                log.debug("save all");
                 userRoleLinkRepository.saveAll(
                         userRoleLinkMapper.toUserRoleLinkList(user, roles)
                 );
 
             } else {
 
-                log.info("merge");
+                log.debug("merge");
 
                 // ищем и удаляем лишние роли
                 List<Long> removeRoles = currentUserRoleLink.stream()
@@ -51,7 +51,7 @@ public class UserRoleLinkUtils {
                         .filter(roleId -> roles.stream().noneMatch(r -> r.getId() == roleId))
                         .collect(Collectors.toList());
 
-                log.info("removeRoles " + removeRoles);
+                log.debug("removeRoles " + removeRoles);
 
                 userRoleLinkRepository.deleteAllByIdInBatch(removeRoles);
 
@@ -60,7 +60,7 @@ public class UserRoleLinkUtils {
                                 .noneMatch(url -> url.getRole().getId() == r.getId()))
                         .collect(Collectors.toList());
 
-                log.info("newRoles " + newRoles.toString());
+                log.debug("newRoles " + newRoles.toString());
 
                 if (!newRoles.isEmpty()) {
                     List<UserRoleLink> userRoleLink = userRoleLinkMapper.toUserRoleLinkList(user, newRoles);

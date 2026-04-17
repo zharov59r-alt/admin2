@@ -48,7 +48,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserAllResponse> findAllByNameAndRole(UserAllRequest request) {
-        log.info("findAllByNameAndRole");
+        log.debug("findAllByNameAndRole");
         return userRepository.findAllByNameAndRole(
                 request.getSearchText(),
                 request.getRoles(),
@@ -73,8 +73,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponse findById(Long userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID: " + userId + " не найден"));;
+        User user = userRepository.findByIdOrThrow(userId);
 
         List<RoleDto> roles = roleMapper.toRoleDtoList(
                 roleRepository.findAllByUserId(userId)
@@ -84,12 +83,11 @@ public class UserService {
     }
 
     public UserResponse save(CreateUserRequest request) {
-        log.info("save begin");
+        log.debug("save begin");
         List<Role> roles = roleUtils.findAndCheckRoles(request.getRoles());
 
         User user = userMapper.toUser(request);
         userValidation.check(user);
-        user.setCreationDate(LocalDateTime.now());
         userRepository.save(user);
 
         if (!roles.isEmpty()) {
@@ -103,11 +101,10 @@ public class UserService {
 
     public UserResponse update(UpdateUserRequest request) {
 
-        log.info("update begin");
+        log.debug("update begin");
 
-        User user = userRepository.findById(request.getId())
-                .map(u -> userMapper.toUser(u, request))
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID: " + request.getId() + " не найден"));
+        User user = userRepository.findByIdOrThrow(request.getId());
+        user = userMapper.toUser(user, request);
 
         userValidation.check(user);
 
@@ -122,7 +119,7 @@ public class UserService {
 
     public void delete(Long userId) {
 
-        log.info("delete begin");
+        log.debug("delete begin");
 
         if (!userRepository.existsById(userId))
             throw new NotFoundException("Пользователь с ID: " + userId + " не найден");
